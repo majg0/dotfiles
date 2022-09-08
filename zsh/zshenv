@@ -1,0 +1,25 @@
+#!/usr/bin/env zsh
+
+export WORKSPACE="$HOME/workspace"
+export DOTFILES="$WORKSPACE/dotfiles"
+
+# XDG - https://specifications.freedesktop.org/basedir-spec/basedir-spec-latest.html
+export XDG_CONFIG_HOME=$HOME/.config
+export XDG_DATA_HOME=$XDG_CONFIG_HOME/local/share
+export XDG_CACHE_HOME=$XDG_CONFIG_HOME/cache
+
+# editor
+export EDITOR=hx
+export VISUAL=hx
+
+# zsh
+export ZDOTDIR=$XDG_CONFIG_HOME/zsh # Where to find other zsh files (XDG, clean home!)
+export HISTFILE=$ZDOTDIR/.zhistory # History filepath
+export HISTSIZE=10000 # Maximum events for internal history
+export SAVEHIST=10000 # Maximum events in history file
+
+# PATH
+export PATH=$HOME/bin:$PATH
+
+# rust
+source "$HOME/.cargo/env"

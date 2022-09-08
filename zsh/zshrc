@@ -1,0 +1,131 @@
+# starship
+eval "$(starship init zsh)"
+# fnm
+eval "$(fnm env --use-on-cd)"
+# deno
+export DENO_INSTALL="$HOME/.deno"
+export PATH="$DENO_INSTALL/bin:$PATH"
+# broot
+source ~/.config/broot/launcher/bash/br
+
+# completion
+autoload -U compinit; compinit
+_comp_options+=(globdots) # With hidden files
+# source /my/path/to/zsh/completion.zsh
+
+source $DOTFILES/aliases/git.sh
+
+## docker
+alias dk='docker'
+
+## docker-compose
+alias dkc='docker-compose'
+alias dkcud='docker-compose up -d'
+alias dkcd='docker-compose down'
+alias dkcl='docker-compose logs'
+alias dkcp='docker-compose ps'
+
+## kubectl
+alias k='kubectl'
+alias kcg='kubectl config get-contexts'
+alias kcu='kubectl config use-context'
+alias kde='kubectl describe'
+alias kdep='kubectl describe pod'
+alias kdl='kubectl delete'
+alias kdlp='kubectl delete pod'
+alias keit='kubectl exec -it'
+alias kg='kubectl get'
+alias kgd='kubectl get deploy'
+alias kgp='kubectl get po'
+alias kgs='kubectl get svc'
+alias kgss='kubectl get sts'
+alias klf='kubectl logs -f'
+alias klfp='f() { kubectl logs -f $@ | pino-pretty };f'
+alias kpf='kubectl port-forward'
+alias kpf='kubectl port-forward'
+alias kpfq='kubectl port-forward service/local-db -n core-qa 3307:3306'
+alias kpfu='kubectl port-forward service/local-db -n core-unstable 3308:3306'
+
+## devctl
+alias dc='devctl'
+alias dcdp='devctl dev | pino-pretty'
+alias dcan='export AWS_ACCESS_KEY_ID=; export AWS_SECRET_ACCESS_KEY=""'
+alias dcada='devctl awsenv --role NormAdministrator && eval $(devctl awsenv --role NormAdministrator)'
+alias dcadd='devctl awsenv && eval $(devctl awsenv)'
+alias dcapa='devctl awsenv --role NormAdministrator --env PROD && eval $(devctl awsenv --role NormAdministrator --env PROD)'
+alias dcapd='devctl awsenv --env PROD && eval $(devctl awsenv --env PROD)'
+alias dcb='devctl boot'
+alias dcc='devctl config'
+alias dccd='devctl create-dataset'
+alias dcle='devctl login-ecr'
+alias dcu='devctl update'
+alias dcucl='devctl update --subsystem core-local'
+alias dcua='devctl update --subsystem analyze'
+alias dcub='devctl update --subsystem build'
+alias dcuf='devctl update --subsystem field'
+alias dcusp='devctl update --subsystem simstore-platform'
+alias dcsd='devctl set-develop'
+alias dcn='$WORKSPACE/ipsos-simstore/devcontrol/bin/run'
+alias dcnc='$WORKSPACE/ipsos-simstore/devcontrol/bin/run config'
+alias dcnu='$WORKSPACE/ipsos-simstore/devcontrol/bin/run update'
+
+## telepresence
+alias tp='telepresence'
+alias tpc='telepresence connect'
+alias tpi='telepresence intercept'
+alias tple='telepresence leave'
+alias tpli='telepresence list'
+alias tpq='telepresence quit'
+alias tps='telepresence status'
+alias tpu='telepresence uninstall'
+
+## terraform
+alias tf='terraform'
+alias tfa='terraform apply'
+alias tfi='terraform init'
+alias tfp='terraform plan'
+
+## cd
+alias cdis='cd $WORKSPACE/ipsos-simstore'
+alias cdcl='cd $WORKSPACE/ipsos-simstore/core-local'
+alias cdd='cd $WORKSPACE/ipsos-simstore/devcontrol'
+alias cdht='cd $WORKSPACE/ipsos-simstore/homebrew-tap'
+alias cds='cd $WORKSPACE/ipsos-simstore/simstore'
+alias cdl='cd $WORKSPACE/ipsos-simstore/simstore/libraries'
+alias cdemb='cd $WORKSPACE/ipsos-simstore/simstore/libraries/event-message-bus'
+alias cdlb='cd $WORKSPACE/ipsos-simstore/simstore/libraries/lib-backend'
+alias cdlf='cd $WORKSPACE/ipsos-simstore/simstore/libraries/lib-frontend'
+alias cdls='cd $WORKSPACE/ipsos-simstore/simstore/libraries/lib-shared'
+alias cdlsc='cd $WORKSPACE/ipsos-simstore/simstore/libraries/simstore-components'
+alias cda='cd $WORKSPACE/ipsos-simstore/simstore/subsystems/analyze'
+alias cdab='cd $WORKSPACE/ipsos-simstore/simstore/subsystems/analyze/backend'
+alias cdaf='cd $WORKSPACE/ipsos-simstore/simstore/subsystems/analyze/frontend'
+alias cdb='cd $WORKSPACE/ipsos-simstore/simstore/subsystems/build'
+alias cdbb='cd $WORKSPACE/ipsos-simstore/simstore/subsystems/build/backend'
+alias cdbc='cd $WORKSPACE/ipsos-simstore/simstore/subsystems/build/connect'
+alias cdbf='cd $WORKSPACE/ipsos-simstore/simstore/subsystems/build/frontend'
+alias cdlds='cd $WORKSPACE/ipsos-simstore/simstore/subsystems/simstore-platform/legacy-data-sync'
+alias cdfb='cd $WORKSPACE/ipsos-simstore/simstore/subsystems/field/backend'
+alias cdff='cd $WORKSPACE/ipsos-simstore/simstore/subsystems/field/frontend'
+alias cdsi='cd $WORKSPACE/ipsos-simstore/simstore-infrastructure'
+
+## rush
+alias rd='rush install && rush build --to-except .'
+alias ri='rush install'
+alias rb='rush build'
+alias rbt='rush build --to'
+alias rbte='rush build --to-except'
+alias ru='rush update'
+
+## rushx
+alias rx='rushx'
+alias rxg='rushx generate'
+alias rxsd='rushx start:dev'
+alias rxsdp='rushx start:dev | pino-pretty'
+alias rxt='rushx test'
+alias rxtd='rushx test:debug'
+alias rxtw='rushx test:watch'
+
+## utils
+alias cps='cat package.json | jq ".scripts"'
+
