@@ -1,0 +1,1 @@
+brew tap homebrew/cask-fonts && brew install --cask font-hasklug-nerd-font
