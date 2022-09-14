@@ -1,13 +1,14 @@
-#!/bin/sh
-
 ## add
 alias ga='git add'
 alias gaa='git add -A'
 alias gap='git add -p'
 
 ## checkout
+alias gco='git checkout'
 alias gcob='git checkout -b'
-alias gcom='git checkout master'
+alias gcod='git checkout develop'
+alias gcom='git checkout main'
+alias gcomr='git checkout master'
 
 ## clean
 alias gnfd='git clean -fd'
@@ -43,6 +44,7 @@ alias gpr='git pull --rebase'
 alias gpro='git pull --rebase origin'
 alias gprod='git pull --rebase origin develop'
 alias gpra='git pull --rebase --autostash'
+alias gprao='git pull --rebase --autostash origin'
 alias gpraod='git pull --rebase --autostash origin develop'
 
 ## push
