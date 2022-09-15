@@ -4,4 +4,4 @@ source common.sh
 
 source env.sh
 
-runmods install installing installed
+runmods link linking linked

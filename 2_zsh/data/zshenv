@@ -1,0 +1,6 @@
+# This file is located at modname/data/. - three path segments away is the dotfiles root
+export DOTFILES="${$(readlink $0)%/*/*/*}"
+
+pushd $DOTFILES > /dev/null
+source $DOTFILES/env.sh
+popd > /dev/null

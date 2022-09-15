@@ -1,0 +1,4 @@
+pushd $DOTFILES > /dev/null
+source $DOTFILES/alias.sh
+source $DOTFILES/rc.sh
+popd > /dev/null
