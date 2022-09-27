@@ -9,6 +9,17 @@ noremap <Down> <Nop>
 noremap <Left> <Nop>
 noremap <Right> <Nop>
 
+""""""""""
+" VISUAL "
+""""""""""
+
+" Display relative line numbers
+set number
+set relativenumber
+
+" Remove search highlights on ESC
+noremap <ESC> :nohls<cr>
+
 """""""
 " FZF "
 """""""
@@ -16,5 +27,9 @@ noremap <Right> <Nop>
 set rtp+=/usr/local/opt/fzf
 nnoremap <silent> <leader>f :FZF<cr>
 nnoremap <silent> <leader>F :FZF ~<cr>
+
+"""""""
+" LUA "
+"""""""
 
 lua require('init')
