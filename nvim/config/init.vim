@@ -28,6 +28,22 @@ set rtp+=/usr/local/opt/fzf
 nnoremap <silent> <leader>f :FZF<cr>
 nnoremap <silent> <leader>F :FZF ~<cr>
 
+""""""""""""
+" VIM PLUG "
+""""""""""""
+
+call plug#begin()
+
+:Plug 'morhetz/gruvbox'
+
+call plug#end()
+
+"""""""""
+" THEME "
+"""""""""
+
+autocmd vimenter * ++nested colorscheme gruvbox
+
 """""""
 " LUA "
 """""""

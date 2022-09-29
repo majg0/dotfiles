@@ -1,2 +1,2 @@
-ln -sf "$modpath/data/zshenv" "$HOME/.zshenv"
-ln -sf "$modpath/data/zshrc" "$ZDOTDIR/.zshrc"
+ln -sf "$modpath/config/zshenv" "$HOME/.zshenv"
+ln -sf "$modpath/config/zshrc" "$ZDOTDIR/.zshrc"

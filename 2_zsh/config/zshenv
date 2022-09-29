@@ -1,4 +1,4 @@
-# This file is located at modname/data/. - three path segments away is the dotfiles root
+# This file is located at modname/config/. - three path segments away is the dotfiles root
 export DOTFILES="${$(readlink $0)%/*/*/*}"
 
 pushd $DOTFILES > /dev/null

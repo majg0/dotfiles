@@ -7,7 +7,7 @@ Each directory is a mod.
 The function `runmods` in `common.sh` executes every file of a given name from each mod in lexicographical module order.
 Mod dependencies are therefore simply handled by prefixing `1_`, `2_`, etc.
 
-By convention, configuration files go into each mod's `data` folder.
+By convention, configuration files go into each mod's `config` folder.
 
 Linking and installing will both each automatically export environment variables before starting.
 
