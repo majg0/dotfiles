@@ -1,0 +1,141 @@
+require 'opts'
+require 'keys'
+require 'plug'
+
+require('mason').setup()
+
+require('mason-lspconfig').setup()
+
+require('telescope').load_extension('fzf')
+
+require('lualine').setup {
+  options = { theme = 'gruvbox' }
+}
+
+require("nvim-tree").setup()
+
+local cmp = require("cmp")
+cmp.setup({
+  snippet = {
+    expand = function(args)
+      require('luasnip').lsp_expand(args.body)
+    end,
+  },
+  mapping = {
+    ['<CR>'] = cmp.mapping.confirm({ select = true }),
+    ['<Tab>'] = cmp.mapping(function(fallback)
+      if cmp.visible() then
+        cmp.select_next_item()
+      else
+        fallback()
+      end
+    end, { 'i', 's' }),
+    ['<S-Tab>'] = cmp.mapping(function()
+      if cmp.visible() then
+        cmp.select_prev_item()
+      end
+    end, { 'i', 's' }),
+  },
+  sources = cmp.config.sources({
+    { name = "nvim_lsp" },
+    { name = "nvim_lsp_signature_help" },
+    { name = "path" },
+  }, {
+    { name = "buffer", keyword_length = 3 },
+  }),
+})
+
+-- Setup buffer-local keymaps / options for LSP buffers
+local capabilities = require("cmp_nvim_lsp").default_capabilities(vim.lsp.protocol.make_client_capabilities())
+local lsp_attach = function(client, buf)
+  local bmap = function(lhs, rhs, desc)
+    vim.keymap.set("n", lhs, rhs, { noremap=true, silent=true, buffer=buf, desc=desc })
+  end
+    
+  bmap("<leader>qf", vim.diagnostic.setqflist, "Quickfix Diagnostics")
+  bmap("[d", vim.diagnostic.goto_prev, "Previous Diagnostic")
+  bmap("]d", vim.diagnostic.goto_next, "Next Diagnostic")
+  bmap("<leader>e", vim.diagnostic.open_float, "Explain Diagnostic")
+  bmap("K", vim.lsp.buf.hover, "Hover Info")
+  bmap("<leader>ca", vim.lsp.buf.code_action, "Code Action")
+  bmap("<leader>cr", vim.lsp.buf.rename, "Rename Symbol")
+  bmap("<leader>fs", vim.lsp.buf.document_symbol, "Document Symbols")
+  bmap("<leader>fS", vim.lsp.buf.workspace_symbol, "Workspace Symbols")
+  bmap("<space>f", function() vim.lsp.buf.format { async=true } end, "Format File")
+  bmap("gr", vim.lsp.buf.references, "Format File")
+
+  local bset = vim.api.nvim_buf_set_option
+	bset(buf, "formatexpr", "v:lua.vim.lsp.formatexpr()")
+	bset(buf, "omnifunc", "v:lua.vim.lsp.omnifunc")
+	bset(buf, "tagfunc", "v:lua.vim.lsp.tagfunc")
+end
+
+local extension_path = vim.env.XDG_DATA_HOME .. '/nvim/mason/packages/codelldb/extension/'
+local codelldb_path = extension_path .. 'adapter/codelldb'
+local liblldb_path = extension_path .. 'lldb/lib/liblldb.dylib'
+
+-- DAP
+local dap = require('dap')
+dap.adapters.lldb = {
+  type = 'executable',
+  command = codelldb_path,
+  name = 'lldb'
+}
+
+-- DAP UI
+local dapui = require("dapui")
+dapui.setup()
+dap.listeners.after.event_initialized["dapui_config"] = function()
+  dapui.open()
+end
+dap.listeners.before.event_terminated["dapui_config"] = function()
+  dapui.close()
+end
+dap.listeners.before.event_exited["dapui_config"] = function()
+  dapui.close()
+end
+
+local map = vim.keymap.set
+local opt = { noremap = true, silent = true }
+map('n', '<f5>', "<cmd>lua require'dap'.continue()<cr>", opt)
+map('n', '<f10>', "<cmd>lua require'dap'.step_over()<cr>", opt)
+map('n', '<f11>', "<cmd>lua require'dap'.step_into()<cr>", opt)
+map('n', '<f12>', "<cmd>lua require'dap'.step_out()<cr>", opt)
+map('n', '<leader>db', "<cmd>lua require'dap'.toggle_breakpoint()<cr>", opt)
+map('n', '<leader>dB', "<cmd>lua require'dap'.set_breakpoint(vim.fn.input('Breakpoint condition: '))<cr>", opt)
+map('n', '<leader>dm', "<cmd>lua require'dap'.set_breakpoint(nil, nil, vim.fn.input('Log point message: '))<cr>", opt)
+map('n', '<leader>dr', "<cmd>lua require'dap'.repl.open()<cr>", opt)
+map('n', '<leader>dl', "<cmd>lua require'dap'.run_last()<cr>", opt)
+
+-- RUST
+dap.configurations.rust = {
+  {
+    name = 'Launch',
+    type = 'lldb',
+    request = 'launch',
+    program = function()
+      return vim.fn.input('Path to executable: ', vim.fn.getcwd() .. '/', 'file')
+    end,
+    cwd = '${workspaceFolder}',
+    stopOnEntry = false,
+    args = {},
+  }
+}
+
+require("rust-tools").setup({
+	server = {
+		capabilities = capabilities,
+		on_attach = lsp_attach,
+	},
+  dap = {
+    adapter = require('rust-tools.dap').get_codelldb_adapter(
+      codelldb_path,
+      liblldb_path
+    )
+  },
+})
+
+require('lspconfig')
+
+vim.api.nvim_command [[colorscheme gruvbox]]
+
