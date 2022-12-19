@@ -131,6 +131,8 @@ require('packer').startup(function(use)
     end,
   }
 
+  use 'sbdchd/neoformat'
+
   -- Automatically set up configuration after cloning packer.nvim
   if packer_bootstrap then
     require('packer').sync()

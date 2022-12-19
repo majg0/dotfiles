@@ -171,3 +171,9 @@ lspconfig.tsserver.setup({
 
 vim.api.nvim_command [[colorscheme gruvbox]]
 
+local fmt_augroup_id = vim.api.nvim_create_augroup('fmt', { clear = true })
+vim.api.nvim_create_autocmd({'BufWritePre'}, {
+  group = fmt_augroup_id,
+  pattern = "*",
+  command = "Neoformat"
+})
