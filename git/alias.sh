@@ -23,6 +23,12 @@ alias gcna='git commit --no-verify --amend'
 alias gcnf='git commit --no-verify --fixup'
 alias gcnm='git commit --no-verify --message'
 
+## cherry-pick
+alias gcp='git cherry-pick'
+alias gcpc='git cherry-pick --continue'
+alias gcps='git cherry-pick --skip'
+alias gcpa='git cherry-pick --abort'
+
 ## diff
 alias gd='git diff'
 alias gdc='git diff --cached'
