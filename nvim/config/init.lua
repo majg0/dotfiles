@@ -169,7 +169,24 @@ lspconfig.tsserver.setup({
   on_attach = lsp_attach,
 })
 
-vim.api.nvim_command [[colorscheme gruvbox]]
+lspconfig.terraformls.setup{}
+
+require'nvim-treesitter.configs'.setup {
+  -- A list of parser names, or "all"
+  ensure_installed = { "c", "lua", "rust", "hcl" },
+
+  -- Install parsers synchronously (only applied to `ensure_installed`)
+  sync_install = false,
+
+  -- Automatically install missing parsers when entering buffer
+  -- Recommendation: set to false if you don't have `tree-sitter` CLI installed locally
+  auto_install = true,
+
+  highlight = {
+    -- `false` will disable the whole extension
+    enable = true,
+  },
+}
 
 local fmt_augroup_id = vim.api.nvim_create_augroup('fmt', { clear = true })
 vim.api.nvim_create_autocmd({'BufWritePre'}, {
@@ -177,3 +194,5 @@ vim.api.nvim_create_autocmd({'BufWritePre'}, {
   pattern = "*",
   command = "Neoformat"
 })
+
+vim.api.nvim_command [[colorscheme gruvbox]]
