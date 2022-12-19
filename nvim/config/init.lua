@@ -78,8 +78,18 @@ local lsp_attach = function(client, buf)
   bmap("<leader>cr", vim.lsp.buf.rename, "Rename Symbol")
   bmap("<leader>fs", vim.lsp.buf.document_symbol, "Document Symbols")
   bmap("<leader>fS", vim.lsp.buf.workspace_symbol, "Workspace Symbols")
-  bmap("<space>f", function() vim.lsp.buf.format { async=true } end, "Format File")
-  bmap("gr", vim.lsp.buf.references, "Format File")
+  bmap("gr", vim.lsp.buf.references, "References")
+
+  vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, bufopts)
+  vim.keymap.set('n', 'gd', vim.lsp.buf.definition, bufopts)
+  vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, bufopts)
+  vim.keymap.set('n', '<C-k>', vim.lsp.buf.signature_help, bufopts)
+  vim.keymap.set('n', '<space>wa', vim.lsp.buf.add_workspace_folder, bufopts)
+  vim.keymap.set('n', '<space>wr', vim.lsp.buf.remove_workspace_folder, bufopts)
+  vim.keymap.set('n', '<space>wl', function()
+    print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
+  end, bufopts)
+  vim.keymap.set('n', '<space>D', vim.lsp.buf.type_definition, bufopts)
 
   local bset = vim.api.nvim_buf_set_option
 	bset(buf, "formatexpr", "v:lua.vim.lsp.formatexpr()")
@@ -152,7 +162,12 @@ require("rust-tools").setup({
   },
 })
 
-require('lspconfig')
+local lspconfig = require('lspconfig')
+
+lspconfig.tsserver.setup({
+  capabilities = capabilities,
+  on_attach = lsp_attach,
+})
 
 vim.api.nvim_command [[colorscheme gruvbox]]
 
