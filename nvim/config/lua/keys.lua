@@ -1,5 +1,5 @@
 local map = vim.keymap.set
-local opt = { noremap = true, silent = true }
+local opt = { noremap = true }
 
 -- Core
 map('n', '<up>', '<nop>', opt)
@@ -7,6 +7,12 @@ map('n', '<down>', '<nop>', opt)
 map('n', '<left>', '<nop>', opt)
 map('n', '<right>', '<nop>', opt)
 map('n', '<esc>', '<cmd>nohls<cr>', opt)
+
+-- Window navigation
+map('n', '<C-h>', '<C-w>h', opt)
+map('n', '<C-j>', '<C-w>j', opt)
+map('n', '<C-k>', '<C-w>k', opt)
+map('n', '<C-l>', '<C-w>l', opt)
 
 -- Telescope
 map('n', '<leader>ff', '<cmd>Telescope find_files<cr>', opt)
