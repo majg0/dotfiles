@@ -1,9 +1,9 @@
 ## docker
-alias d='docker'
+alias dk='docker'
 
 ## docker-compose
-alias dc='docker-compose'
-alias dcud='docker-compose up -d'
-alias dcd='docker-compose down'
-alias dcl='docker-compose logs'
-alias dcp='docker-compose ps'
+alias dkc='docker-compose'
+alias dkcud='docker-compose up -d'
+alias dkcd='docker-compose down'
+alias dkcl='docker-compose logs'
+alias dkcp='docker-compose ps'
