@@ -1,24 +1,14 @@
-local map = vim.keymap.set
-local opt = { noremap = true }
+vim.g.mapleader = ' '
 
 -- Core
-map('n', '<up>', '<nop>', opt)
-map('n', '<down>', '<nop>', opt)
-map('n', '<left>', '<nop>', opt)
-map('n', '<right>', '<nop>', opt)
-map('n', '<esc>', '<cmd>nohls<cr>', opt)
+vim.keymap.set('n', '<up>', '<nop>')
+vim.keymap.set('n', '<down>', '<nop>')
+vim.keymap.set('n', '<left>', '<nop>')
+vim.keymap.set('n', '<right>', '<nop>')
+vim.keymap.set('n', '<esc>', '<cmd>nohls<cr>')
 
 -- Window navigation
-map('n', '<C-h>', '<C-w>h', opt)
-map('n', '<C-j>', '<C-w>j', opt)
-map('n', '<C-k>', '<C-w>k', opt)
-map('n', '<C-l>', '<C-w>l', opt)
-
--- Telescope
-map('n', '<leader>ff', '<cmd>Telescope find_files<cr>', opt)
-map('n', '<leader>fg', '<cmd>Telescope live_grep<cr>', opt)
-map('n', '<leader>fb', '<cmd>Telescope buffers<cr>', opt)
-map('n', '<leader>fh', '<cmd>Telescope help_tags<cr>', opt)
-
--- NvimTree
-map('n', '<leader>t', '<cmd>NvimTreeToggle<cr>', opt)
+vim.keymap.set('n', '<C-h>', '<C-w>h')
+vim.keymap.set('n', '<C-j>', '<C-w>j')
+vim.keymap.set('n', '<C-k>', '<C-w>k')
+vim.keymap.set('n', '<C-l>', '<C-w>l')

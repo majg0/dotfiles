@@ -1,18 +1,22 @@
 require 'opts'
 require 'keys'
-require 'plug'
+require 'plugins'
 
 require('mason').setup()
 
-require('mason-lspconfig').setup()
-
-require('telescope').load_extension('fzf')
+local mason_lspconfig = require('mason-lspconfig')
+mason_lspconfig.setup({
+  ensure_installed = {
+    'rust_analyzer',
+    'tsserver',
+    'pyright',
+    'terraformls'
+  }
+})
 
 require('lualine').setup {
   options = { theme = 'gruvbox' }
 }
-
-require("nvim-tree").setup()
 
 -- Setup completion
 local has_words_before = function()
@@ -149,6 +153,17 @@ dap.configurations.rust = {
   }
 }
 
+local lspconfig = require('lspconfig')
+
+mason_lspconfig.setup_handlers({
+  function(server_name)
+    lspconfig[server_name].setup({
+      on_attach = lsp_attach,
+      capabilities = lsp_capabilities,
+    })
+  end,
+})
+
 require("rust-tools").setup({
 	server = {
 		capabilities = capabilities,
@@ -162,37 +177,9 @@ require("rust-tools").setup({
   },
 })
 
-local lspconfig = require('lspconfig')
-
-lspconfig.tsserver.setup({
-  capabilities = capabilities,
-  on_attach = lsp_attach,
-})
-
-lspconfig.terraformls.setup{}
-
-require'nvim-treesitter.configs'.setup {
-  -- A list of parser names, or "all"
-  ensure_installed = { "c", "lua", "rust", "hcl" },
-
-  -- Install parsers synchronously (only applied to `ensure_installed`)
-  sync_install = false,
-
-  -- Automatically install missing parsers when entering buffer
-  -- Recommendation: set to false if you don't have `tree-sitter` CLI installed locally
-  auto_install = true,
-
-  highlight = {
-    -- `false` will disable the whole extension
-    enable = true,
-  },
-}
-
 local fmt_augroup_id = vim.api.nvim_create_augroup('fmt', { clear = true })
 vim.api.nvim_create_autocmd({'BufWritePre'}, {
   group = fmt_augroup_id,
   pattern = "*",
   command = "Neoformat"
 })
-
-vim.api.nvim_command [[colorscheme gruvbox]]
