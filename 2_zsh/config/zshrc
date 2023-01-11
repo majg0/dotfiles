@@ -1,3 +1,14 @@
+# Initialize zsh completions
+autoload -U compinit;
+compinit
+#
+# Initialize bash completions (for when no zsh support exists, like for pipx)
+autoload -U bashcompinit;
+bashcompinit
+
+# Make dotfiles available for completion (e.g. `.git` folders won't show otherwise)
+_comp_options+=(globdots)
+
 pushd $DOTFILES > /dev/null
 source $DOTFILES/alias.sh
 source $DOTFILES/rc.sh
