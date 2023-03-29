@@ -22,8 +22,6 @@ require('packer').startup({
       requires = {'mfussenegger/nvim-dap'}
     })
 
-    use 'jose-elias-alvarez/null-ls.nvim'
-
     use({
       'kylechui/nvim-surround',
       tag = '*', -- Use for stability; omit to use `main` branch for the latest features
@@ -127,7 +125,7 @@ require('packer').startup({
       end,
     }
 
-    use 'sbdchd/neoformat'
+    use 'jose-elias-alvarez/null-ls.nvim'
 
     -- Automatically set up configuration after cloning packer.nvim
     if packer_bootstrap then
