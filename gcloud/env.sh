@@ -1,0 +1,1 @@
+export GCLOUD_DATA_DIR="$XDG_DATA_HOME/gcloud"
