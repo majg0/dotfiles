@@ -65,6 +65,7 @@ alias guf='git push --force-with-lease'
 # rebase
 alias griaa='git rebase -i --autosquash --autostash'
 alias grc='git rebase --continue'
+alias gra='git rebase --abort'
 
 # reset
 alias gt='git reset'
