@@ -158,6 +158,29 @@ require("packer").startup({
 			},
 		})
 
+		use({
+			"mxsdev/nvim-dap-vscode-js",
+			requires = { "mfussenegger/nvim-dap" },
+		})
+		use({
+			"microsoft/vscode-js-debug",
+			run = "npm install --legacy-peer-deps && npx gulp vsDebugServerBundle && mv dist out",
+		})
+		use({
+			"theHamsta/nvim-dap-virtual-text",
+			name = "nvim-dap-virtual-text",
+			opts = {
+				all_frames = true,
+				commented = true,
+			},
+		})
+		use({
+			"nvim-telescope/telescope-dap.nvim",
+			config = function()
+				require("telescope").load_extension("dap")
+			end,
+		})
+
 		-- Automatically set up configuration after cloning packer.nvim
 		if packer_bootstrap then
 			require("packer").sync()

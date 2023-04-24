@@ -100,58 +100,6 @@ local lsp_attach = function(client, buf)
 	bset(buf, "tagfunc", "v:lua.vim.lsp.tagfunc")
 end
 
-local extension_path = vim.env.XDG_DATA_HOME .. "/nvim/mason/packages/codelldb/extension/"
-local codelldb_path = extension_path .. "adapter/codelldb"
-local liblldb_path = extension_path .. "lldb/lib/liblldb.dylib"
-
--- DAP
-local dap = require("dap")
-dap.adapters.lldb = {
-	type = "executable",
-	command = codelldb_path,
-	name = "lldb",
-}
-
--- DAP UI
-local dapui = require("dapui")
-dapui.setup()
-dap.listeners.after.event_initialized["dapui_config"] = function()
-	dapui.open()
-end
-dap.listeners.before.event_terminated["dapui_config"] = function()
-	dapui.close()
-end
-dap.listeners.before.event_exited["dapui_config"] = function()
-	dapui.close()
-end
-
-local map = vim.keymap.set
-local opt = { noremap = true, silent = true }
-map("n", "<f5>", "<cmd>lua require'dap'.continue()<cr>", opt)
-map("n", "<f10>", "<cmd>lua require'dap'.step_over()<cr>", opt)
-map("n", "<f11>", "<cmd>lua require'dap'.step_into()<cr>", opt)
-map("n", "<f12>", "<cmd>lua require'dap'.step_out()<cr>", opt)
-map("n", "<leader>db", "<cmd>lua require'dap'.toggle_breakpoint()<cr>", opt)
-map("n", "<leader>dB", "<cmd>lua require'dap'.set_breakpoint(vim.fn.input('Breakpoint condition: '))<cr>", opt)
-map("n", "<leader>dm", "<cmd>lua require'dap'.set_breakpoint(nil, nil, vim.fn.input('Log point message: '))<cr>", opt)
-map("n", "<leader>dr", "<cmd>lua require'dap'.repl.open()<cr>", opt)
-map("n", "<leader>dl", "<cmd>lua require'dap'.run_last()<cr>", opt)
-
--- RUST
-dap.configurations.rust = {
-	{
-		name = "Launch",
-		type = "lldb",
-		request = "launch",
-		program = function()
-			return vim.fn.input("Path to executable: ", vim.fn.getcwd() .. "/", "file")
-		end,
-		cwd = "${workspaceFolder}",
-		stopOnEntry = false,
-		args = {},
-	},
-}
-
 local lspconfig = require("lspconfig")
 
 mason_lspconfig.setup_handlers({
