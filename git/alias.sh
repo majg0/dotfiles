@@ -6,6 +6,7 @@ alias gap='git add --patch'
 # branch
 alias gb='git branch'
 alias gbd='git branch --delete'
+alias gbmd='git branch --merged | grep -vE "\\*|(^(main|master|dev|prod)$)" | xargs git branch -d'
 
 # checkout
 alias gco='git checkout'
