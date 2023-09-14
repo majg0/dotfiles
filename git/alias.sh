@@ -41,6 +41,7 @@ alias gdc='git diff --cached'
 
 # log
 alias gl='git log'
+alias glog='git log --oneline --graph'
 
 # merge
 alias gmod='git merge origin/dev'
