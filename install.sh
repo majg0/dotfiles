@@ -1,7 +1,9 @@
 set -e
 
-source common.sh
+MOD=${1:-ubuntu}
 
-source env.sh
+source ./common.sh
 
-runmods install installing installed
+source ./env.sh
+
+runmods $MOD installing installed

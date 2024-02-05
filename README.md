@@ -14,8 +14,8 @@ Linking and installing will both each automatically export environment variables
 ## Usage
 
 1. Clone anywhere.
-2. `./link.sh`.
-3. `./install.sh`.
+2. `source link.sh`.
+3. `source install.sh`.
 
 ## Scripts
 

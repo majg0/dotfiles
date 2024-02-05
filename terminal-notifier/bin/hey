@@ -1,1 +1,0 @@
-terminal-notifier -activate net.kovidgoyal.kitty -sound default -message $1

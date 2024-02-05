@@ -19,7 +19,10 @@ light_cyan="\033[96m"
 white="\033[97m"
 
 function runmods() {
-	mods=($(find -s $(readlink -f .) -depth 1 -type d))
+	# 1. `find` non-directories in this directory (which may be symbolically linked)
+	# 2. sort them lexicographically using `sort`
+	# 3. remove the dotfiles directory itself with `tail`
+ 	mods=($(find $(readlink -f .) -maxdepth 1 -type d | sort | tail -n+2))
 
 	local doing="$2"
 	local done="$3"
@@ -34,12 +37,4 @@ function runmods() {
 			test -n "$done" && echo "${light_green}$done $modname${default}"
 		fi
 	done
-}
-
-function brew_cask() {
-	if brew list $1 &> /dev/null; then
-		brew outdated --cask $1 > /dev/null || brew reinstall --cask $1
-	else
-		brew install --cask $1
-	fi
 }

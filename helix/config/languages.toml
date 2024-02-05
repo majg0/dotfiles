@@ -1,0 +1,53 @@
+[language-server.clangd]
+command = "clangd"
+args = ["--background-index", "--all-scopes-completion", "--query-driver=/usr/bin/c++,/usr/bin/nvcc,/usr/bin/gcc"]
+
+[language-server.pylsp]
+command = "pylsp"
+
+[language-server.pylsp.config.pylsp.plugins]
+# pyflakes = {enabled = false}
+# mccabe = {enabled = false}
+# pyls_isort = {enabled = false}
+# pycodestyle = {enabled = false, maxLineLength = 88}
+# pydocstyle = {enabled = false}
+# autopep8 = {enabled = false}
+# yapf = {enabled = false}
+# flake8 = {enabled = false}
+# pylint = {enabled = true}
+# ruff = {enabled = false, extendSelect = ["I"]}
+mypy = {enabled = true, live_mode = true, strict = true}
+
+[language-server.rust-analyzer]
+command = "rust-analyzer"
+config.check.command = "clippy"
+config.check.args = ["--", "-W", "clippy::pedantic"]
+
+[[language]]
+name = "cpp"
+auto-format = true
+formatter = { command = "clang-format -n -Werror"}
+language-servers = [{name = "clangd"}]
+
+[[language]]
+name = "rust"
+auto-format = true
+language-servers = [{name = "rust-analyzer"}]
+
+[[language]]
+## Requires
+# pip install black (Activated)
+# pip install pylsp (Activated)
+# pip install pylsp-mypy (Activated)
+# pip install python-lsp-server[pylint] (Deactivated)
+name = "python"
+auto-format = true
+formatter = { command = "black", args = ["--quiet", "-"] }
+language-servers = [{name = "pylsp"}]
+
+
+[[language]]
+name = "typescript"
+auto-format = true
+formatter = { command = "npx", args = ["prettier", "--parser", "typescript"] }
+indent = { tab-width = 4, unit = "    " }
