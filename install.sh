@@ -1,3 +1,5 @@
+#!/bin/bash
+
 set -e
 
 MOD=${1:-ubuntu}

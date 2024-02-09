@@ -8,3 +8,9 @@ select = "underline"
 
 [editor.file-picker]
 hidden = false
+
+[editor.soft-wrap]
+enable = true
+
+[editor.lsp]
+display-inlay-hints = true
