@@ -1,0 +1,16 @@
+[iface]
+command=~/.config/i3blocks/iface
+color=#00FF00
+interval=10
+
+[day]
+command=date +'%Z %-:::z w%-V %e'
+interval=3600
+
+[time]
+command=date +'%H:%M'
+interval=1
+
+[key_layout]
+command=~/.config/i3blocks/key-layout
+interval=1
