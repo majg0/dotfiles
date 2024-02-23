@@ -1,5 +1,10 @@
+# NOTE: doesn't necessarily exist on fresh install
+mkdir -p ~/.local/bin
+# NOTE: this appends ^ to PATH on fresh install
+source ~/.profile
+
 # NOTE: puts binaries in ~/.local/kitty.app
-curl --proto '=https' --tlsv1.2 -sSf https://sw.kovidgoyal.net/kitty/installer.sh | sh /dev/stdin launch=n
+wget --output-document - https://sw.kovidgoyal.net/kitty/installer.sh | sh /dev/stdin launch=n
 
 # Create symbolic links to add kitty and kitten to PATH (assuming ~/.local/bin is in
 # your system-wide PATH)
@@ -14,3 +19,5 @@ sed -i "s|Exec=kitty|Exec=/home/$USER/.local/kitty.app/bin/kitty|g" ~/.local/sha
 
 # Make kitty the default terminal emulator
 sudo update-alternatives --install /usr/bin/x-terminal-emulator x-terminal-emulator `which kitty` 50
+
+notify "${light_green}You may want to start a new kitty terminal now 😊${default}"

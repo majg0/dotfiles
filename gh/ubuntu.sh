@@ -1,1 +1,1 @@
-sudo apt install gh
+sudo apt --yes install gh

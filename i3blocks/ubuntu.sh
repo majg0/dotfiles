@@ -1,1 +1,1 @@
-sudo apt install i3blocks
+sudo apt --yes install i3blocks

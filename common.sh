@@ -18,23 +18,35 @@ light_magenta="\033[95m"
 light_cyan="\033[96m"
 white="\033[97m"
 
+base_path=$(readlink -f .)
+notif_path=$base_path/notifications
+
+function notify() {
+	echo -e "$@" >> $notif_path
+}
+
 function runmods() {
 	# 1. `find` non-directories in this directory (which may be symbolically linked)
 	# 2. sort them lexicographically using `sort`
 	# 3. remove the dotfiles directory itself with `tail`
- 	mods=($(find $(readlink -f .) -maxdepth 1 -type d | sort | tail -n+2))
+ 	mods=($(find $base_path -maxdepth 1 -type d | sort | tail -n+2))
 
 	local doing="$2"
 	local done="$3"
+
+	touch $notif_path
 
 	for modpath in "${mods[@]}"
 	do
 		modfile="$modpath/$1.sh"
 		modname=$(basename $modpath | cut -d_ -f2)
 		if test -f $modfile; then
-			test -n "$doing" && echo "\n${light_yellow}$doing $modname${default}"
+			test -n "$doing" && echo -e "\n${light_yellow}$doing $modname${default}"
 			source $modfile
-			test -n "$done" && echo "${light_green}$done $modname${default}"
+			test -n "$done" && echo -e "${light_green}$done $modname${default}"
 		fi
 	done
+
+        cat $notif_path
+	rm $notif_path
 }

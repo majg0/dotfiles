@@ -1,1 +1,1 @@
-sudo apt install fzf
+sudo apt --yes install fzf
