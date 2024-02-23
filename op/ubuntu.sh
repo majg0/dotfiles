@@ -32,7 +32,7 @@ if [ ! -f "$XDG_CONFIG_HOME/op/plugins.sh" ]; then
 	notify "2. Navigate through ${light_yellow}⋮${default} > ${light_yellow}Settings...${default} > ${light_yellow}Developer${default}"
 	notify "3. Click ${light_yellow}Set Up SSH Agent...${default}"
 	notify "4. Do not copy or edit. Click ${light_yellow}⨯${default}"
-	notify "5. Uncheck ${light_yellow}Use rich approval prompt${default}"
+	notify "5. Make sure ${light_yellow}Use rich approval prompt${default} is checked, or i3 won't work"
 	notify "6. Check ${light_yellow}Integrate with 1Password CLI${default}"
 	notify "7. Run ${light_blue}op plugin init gh${default}. You won't need to configure any alias, as plugins are sourced on shell startup."
 fi

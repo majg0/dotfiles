@@ -20,4 +20,6 @@ sed -i "s|Exec=kitty|Exec=/home/$USER/.local/kitty.app/bin/kitty|g" ~/.local/sha
 # Make kitty the default terminal emulator
 sudo update-alternatives --install /usr/bin/x-terminal-emulator x-terminal-emulator `which kitty` 50
 
-notify "${light_green}You may want to start a new kitty terminal now 😊${default}"
+if [ ! $TERM = xterm-kitty ]; then
+  notify "${light_cyan}You may want to start a new kitty terminal now 😊${default}"
+fi
