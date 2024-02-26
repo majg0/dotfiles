@@ -1,0 +1,16 @@
+[commit]
+	gpgSign = true
+[core]
+	autocrlf = input
+[gpg]
+	format = ssh
+[gpg "ssh"]
+	program = "/opt/1Password/op-ssh-sign"
+[pull]
+	rebase = true
+[tag]
+	gpgSign = true
+[user]
+	name = Martin Andrej Johan Grönlund
+	email = martingronlund@live.se
+	signingKey = ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKNarOAcYXJjxbvVWaEPwe3Sw/toX0HvZwCK+xxowhVA

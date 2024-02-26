@@ -1,7 +1,0 @@
-[user]
-	name = Martin Andrej Johan Grönlund
-	email = martingronlund@live.se
-[pull]
-	rebase = true
-[core]
-	autocrlf = input
