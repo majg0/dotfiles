@@ -8,6 +8,8 @@
 	program = "/opt/1Password/op-ssh-sign"
 [pull]
 	rebase = true
+[push]
+	autoSetupRemote = true
 [tag]
 	gpgSign = true
 [user]
