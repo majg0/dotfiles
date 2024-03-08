@@ -10,6 +10,6 @@ n () # to cd on quit
     nnn "$@"
     if [ -f "$NNN_TMPFILE" ]; then
             . "$NNN_TMPFILE"
-            rm -f "$NNN_TMPFILE" > /dev/null
+            \rm -f "$NNN_TMPFILE" > /dev/null
     fi
 }
