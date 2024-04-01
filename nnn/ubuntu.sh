@@ -1,5 +1,6 @@
 sudo apt --yes install libreadline-dev make gcc
 
+rm -rf nnn-repo
 mkdir nnn-repo
 pushd nnn-repo
 	git clone git@github.com:jarun/nnn.git
