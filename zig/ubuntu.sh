@@ -1,7 +1,7 @@
 target="$XDG_CONFIG_HOME/zig_bin"
 rm -rf "$target"
 
-version="$(curl https://ziglang.org/download/index.json | jq -r '.master.version')"
+version="$(curl 'https://ziglang.org/download/index.json' | jq -r '.master.version')"
 arch='x86_64'
 os='linux'
 name="zig-$os-$arch-$version"
@@ -12,3 +12,8 @@ rm -rf "$tarball"
 mv "$name" "$target"
 
 # TODO: verify with minisign
+
+echo "WARNING: zig + zls may be incompatible"
+curl "https://zigtools-releases.nyc3.digitaloceanspaces.com/zls/master/${arch}-${os}/zls" > zls
+chmod +x zls
+mv zls "$target/"
