@@ -32,4 +32,4 @@
 vault = "Private"
 
 [[ssh-keys]]
-vault = "IntuiCell"
+vault = "Home"
