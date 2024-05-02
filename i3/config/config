@@ -23,15 +23,37 @@ bindsym $meh+w exec --no-startup-id setxkbmap -layout us
 # "speak"
 bindsym $meh+s exec --no-startup-id setxkbmap -layout se
 
+set $mode_printscreen (r)egion :: (w)indow :: (s)creen
+mode "$mode_printscreen" {
+    bindsym r exec --no-startup-id \
+        import png:- | \
+        xclip -selection clipboard -t image/png, mode "default"
+
+    bindsym w exec --no-startup-id \
+        import -window $( \
+            i3-msg -t get_tree | \
+            jq 'recurse(.nodes[]) | select(.focused).window' \
+        ) png:- | \
+        xclip -selection clipboard -t image/png, mode "default"
+
+    bindsym s exec --no-startup-id \
+        import -window root png:- | \
+        xclip -selection clipboard -t image/png, mode "default"
+
+    bindsym Return mode "default"
+    bindsym Escape mode "default"
+}
+bindsym $meh+p mode "$mode_printscreen"
+
 # NOTE: sleep 1 adds a small delay to prevent possible race conditions with suspend
-set $Locker i3lock && sleep 1
+set $locker i3lock && sleep 1
 
 set $mode_system (l)ock :: (e)xit :: s(u)spend :: (h)ibernate :: (r)eboot :: (s)hutdown
 mode "$mode_system" {
-    bindsym l exec --no-startup-id $Locker, mode "default"
+    bindsym l exec --no-startup-id $locker, mode "default"
     bindsym e exec --no-startup-id i3-msg exit, mode "default"
-    bindsym u exec --no-startup-id $Locker && systemctl suspend, mode "default"
-    bindsym h exec --no-startup-id $Locker && systemctl hibernate, mode "default"
+    bindsym u exec --no-startup-id $locker && systemctl suspend, mode "default"
+    bindsym h exec --no-startup-id $locker && systemctl hibernate, mode "default"
     bindsym r exec --no-startup-id systemctl reboot, mode "default"
     bindsym s exec --no-startup-id systemctl poweroff -i, mode "default"  
 
@@ -39,7 +61,6 @@ mode "$mode_system" {
     bindsym Return mode "default"
     bindsym Escape mode "default"
 }
-
 bindsym $meh+space mode "$mode_system"
 
 # Set key repeat speed on startup
