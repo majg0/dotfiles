@@ -1,0 +1,14 @@
+# DOCS: https://www.cse.unsw.edu.au/~learn/debugging/modules/gdb_init_file/
+
+# Do not download debug symbols
+set debuginfod enabled off
+
+# Load local .gdbinit per project
+set auto-load safe-path /
+
+# Set up TUI
+tui enable
+tui new-layout default {-horizontal regs 1 src 1 asm 1} 2 status 0 cmd 1
+tui layout default
+tui focus cmd
+tui reg all
