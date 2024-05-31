@@ -1,5 +1,5 @@
 # This file is located at modname/config/. - three path segments away is the dotfiles root
-export DOTFILES="${$(readlink $0)%/*/*/*}"
+export DOTFILES="${$(readlink ${0:a:h}/.zshenv)%/*/*/*}"
 
 pushd $DOTFILES > /dev/null
 source $DOTFILES/env.sh
