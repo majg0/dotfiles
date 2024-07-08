@@ -14,6 +14,7 @@ gaps outer 0px
 set $tfmt <i><b>%title</b></i> :: %instance %class :: %machine
 for_window [all] title_format $tfmt
 for_window [all] title_window_icon on
+for_window [class="Intui"] floating enable
 
 font pango:monospace 8
 font pango:Hasklug Nerd Font Regular 8
