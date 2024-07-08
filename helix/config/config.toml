@@ -2,6 +2,7 @@ theme = "base16_default_dark"
 
 [editor]
 line-number = "relative"
+auto-pairs = false
 
 [editor.cursor-shape]
 insert = "bar"
