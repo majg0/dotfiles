@@ -17,3 +17,14 @@ enable = true
 
 [editor.lsp]
 display-inlay-hints = true
+
+[editor.whitespace]
+render = "all"
+
+[editor.whitespace.characters]
+space = "·"
+nbsp = "⍽"
+nnbsp = "␣"
+tab = "→"
+newline = "⏎"
+tabpad = "_"
