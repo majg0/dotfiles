@@ -1,4 +1,3 @@
-alias z='zig'
 alias zb='zig build'
 alias zbu='zig build uninstall'
 alias zbr='zig build run'
