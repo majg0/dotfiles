@@ -47,6 +47,6 @@ function runmods() {
 		fi
 	done
 
-        cat $notif_path
-	\rm $notif_path
+	cat $notif_path
+	rm -f $notif_path
 }

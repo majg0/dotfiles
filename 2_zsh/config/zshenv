@@ -4,3 +4,5 @@ export DOTFILES="${$(readlink ${0:a:h}/.zshenv)%/*/*/*}"
 pushd $DOTFILES > /dev/null
 source $DOTFILES/env.sh
 popd > /dev/null
+
+export PATH="$HOME/.local/bin:$PATH"
