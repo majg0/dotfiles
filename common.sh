@@ -48,5 +48,5 @@ function runmods() {
 	done
 
 	cat $notif_path
-	rm -f $notif_path
+	rm -f $notif_path > /dev/null
 }
