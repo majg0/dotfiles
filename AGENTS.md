@@ -27,4 +27,4 @@ Linking and installing will both each automatically export environment variables
 
 ## Notes
 
-1. Remember to setup the 1password agent https://developer.1password.com/docs/ssh/get-started/#step-3-turn-on-the-1password-ssh-agent - this doesn't work in WSL on windows though
+1. Remember to setup the 1password agent https://developer.1password.com/docs/ssh/get-started/#step-3-turn-on-the-1password-ssh-agent

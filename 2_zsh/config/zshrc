@@ -9,6 +9,8 @@ bashcompinit
 # Make dotfiles available for completion (e.g. `.git` folders won't show otherwise)
 _comp_options+=(globdots)
 
+export PATH="$DOTFILES/bin:$HOME/.local/bin:$PATH"
+
 pushd $DOTFILES > /dev/null
 source $DOTFILES/alias.sh
 source $DOTFILES/rc.sh
@@ -21,5 +23,3 @@ setopt INTERACTIVE_COMMENTS # Ignore comments in interactive mode.
 
 # Start in ~/w if launched in home directory
 [[ "$PWD" == "$HOME" ]] && cd ~/w
-
-export PATH="$DOTFILES/bin:$PATH"
