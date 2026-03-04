@@ -10,5 +10,8 @@
   "sandbox": {
     "enabled": true,
     "autoAllowBashIfSandboxed": true
+  },
+  "enabledPlugins": {
+    "notify@majg0": true
   }
 }

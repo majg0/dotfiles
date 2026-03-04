@@ -1,0 +1,16 @@
+{
+  "name": "majg0",
+  "owner": {
+    "name": "Martin Andrej Johan Grönlund"
+  },
+  "plugins": [
+    {
+      "name": "notify",
+      "source": "./claude/plugins/notify",
+      "description": "Notifies the TTY via hooks"
+    }
+  ],
+  "metadata": {
+    "description": "majg0's claude plugins"
+  }
+}

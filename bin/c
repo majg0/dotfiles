@@ -1,6 +1,0 @@
-#!/usr/bin/env bash
-set -euo pipefail
-
-export GIT_CONFIG_GLOBAL=~/.config/git/claude
-
-claude $@
