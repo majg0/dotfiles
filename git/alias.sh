@@ -75,7 +75,7 @@ alias gth='git reset --hard'
 alias gthod='git reset --hard origin/dev'
 
 # show
-alias gw='git show'
+alias gk='git show'
 
 # stash
 alias gx='git stash'
@@ -86,3 +86,16 @@ alias gxs='git stash show'
 
 # status
 alias gs='git status'
+
+# worktree
+alias gw='git worktree'
+gwa() {
+  local branch="$1"
+  local dir="$(git rev-parse --show-toplevel)/.local/worktrees/$branch"
+  shift
+  git worktree add -b "$branch" "$dir" "$@"
+  cd "$dir"
+}
+alias gwl='git worktree list'
+alias gwr='git worktree remove'
+alias gwrf='git worktree remove --force'
