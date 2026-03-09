@@ -1,0 +1,144 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# agent-run: Launch AI coding agents in Docker with isolation.
+# OP_SERVICE_ACCOUNT_TOKEN is the only secret passed from host to container.
+# All other credentials are fetched inside the container from 1Password.
+#
+# Network isolation: a tinyproxy sidecar enforces a domain allowlist for tools
+# that respect HTTP_PROXY/HTTPS_PROXY. Container hardening (--cap-drop=ALL,
+# --security-opt=no-new-privileges) provides the primary security boundary.
+#
+# Usage:
+#   agent-run claude [args...]
+#   agent-run codex [args...]
+
+# Ensure Docker daemon is available before proceeding
+if ! docker ps -q >/dev/null 2>&1; then
+  echo "ERROR: Docker daemon is unreachable. Is it running?" >&2
+  exit 1
+fi
+
+IMAGE_NAME="agent-sandbox"
+PROXY_IMAGE="agent-proxy"
+PROXY_NAME="agent-tinyproxy"
+PROXY_NETWORK="agent-proxy"
+PROXY_PORT="8888"
+
+AGENT="${1:?Usage: agent-run <claude|codex> [args...]}"
+shift
+
+case "$AGENT" in
+  claude|codex) ;;
+  *) echo "Unknown agent: $AGENT (supported: claude, codex)" >&2; exit 1 ;;
+esac
+
+# Container name from git context: <agent>-<repo>-<branch>
+REPO_NAME=$(basename "$(git rev-parse --show-toplevel 2>/dev/null)" 2>/dev/null || echo "unknown")
+BRANCH=$(git symbolic-ref --short HEAD 2>/dev/null || echo "nobranch")
+CONTAINER_NAME=$(echo "${AGENT}-${REPO_NAME}-${BRANCH}" | sed 's/[^a-zA-Z0-9._-]/-/g')
+
+# Host git identity
+GIT_NAME=$(git config user.name || echo "Agent")
+GIT_EMAIL=$(git config user.email || echo "agent@localhost")
+
+# Worktree support: if in a worktree, bind-mount the main .git dir so
+# the container can follow gitdir/commondir references.
+# Mounted rw so the agent can commit and push from within the container.
+WORKTREE_VOLUMES=()
+GIT_COMMON_DIR=$(git rev-parse --git-common-dir 2>/dev/null || true)
+if [[ -n "$GIT_COMMON_DIR" && "$GIT_COMMON_DIR" != "$(git rev-parse --git-dir 2>/dev/null || true)" ]]; then
+  GIT_COMMON_DIR=$(cd "$GIT_COMMON_DIR" && pwd)
+  WORKTREE_VOLUMES+=(-v "$GIT_COMMON_DIR:$GIT_COMMON_DIR")
+fi
+
+# The one secret: 1Password service account token.
+# Fetched from the Private vault by the human on the host — the agent never has
+# access to Private. The token itself is scoped to the Agents vault only (API
+# keys, Git PATs), so even if the agent exfiltrates it, blast radius is limited
+# to Agents-vault items with no write access to credentials infrastructure.
+: "${OP_SERVICE_ACCOUNT_TOKEN:=$(op item get "Service Account Auth Token: Agents" --vault Private --field credential --reveal)}"
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+# Always build — layer cache makes this instant when nothing changed
+docker build -t "$IMAGE_NAME" "$SCRIPT_DIR"
+
+# Ensure the proxy network exists.
+# Note: not --internal so op/claude/etc. work even if they don't honour HTTPS_PROXY.
+# Outbound filtering is enforced by tinyproxy (FilterDefaultDeny) for compliant tools;
+# container hardening (--cap-drop=ALL, --security-opt) provides the primary security boundary.
+docker network create "$PROXY_NETWORK" 2>/dev/null || true
+
+# Ensure the tinyproxy sidecar is running.
+# It is long-lived and shared across agent invocations.
+if [[ "$(docker inspect --format '{{.State.Running}}' "$PROXY_NAME" 2>/dev/null)" != "true" ]]; then
+  docker rm -f "$PROXY_NAME" 2>/dev/null || true
+  docker build -f "$SCRIPT_DIR/Dockerfile.proxy" -t "$PROXY_IMAGE" "$SCRIPT_DIR"
+  # Start on the default bridge (internet access), then also join the internal
+  # proxy network so agent containers can reach it by name.
+  docker run -d \
+    --name "$PROXY_NAME" \
+    --restart=unless-stopped \
+    "$PROXY_IMAGE"
+  docker network connect "$PROXY_NETWORK" "$PROXY_NAME"
+fi
+
+# Remove stale container if present, then ensure cleanup on exit
+docker rm -f "$CONTAINER_NAME" 2>/dev/null || true
+trap 'docker rm -f "$CONTAINER_NAME" >/dev/null 2>&1 || true' EXIT
+
+# Create container in detached mode.
+# --cap-drop=ALL: drop all capabilities.
+# --security-opt=no-new-privileges: prevent privilege escalation.
+# HTTP_PROXY / HTTPS_PROXY: route outbound traffic through tinyproxy.
+docker run -d \
+  --name "$CONTAINER_NAME" \
+  --network="$PROXY_NETWORK" \
+  --cap-drop=ALL \
+  --security-opt=no-new-privileges \
+  --memory=8g --cpus=4 --pids-limit=256 \
+  -v "$(pwd):/workspace" \
+  "${WORKTREE_VOLUMES[@]}" \
+  -e HTTP_PROXY="http://${PROXY_NAME}:${PROXY_PORT}" \
+  -e HTTPS_PROXY="http://${PROXY_NAME}:${PROXY_PORT}" \
+  -e NO_PROXY="localhost,127.0.0.1" \
+  -e GIT_AUTHOR_NAME="$GIT_NAME" \
+  -e GIT_AUTHOR_EMAIL="$GIT_EMAIL" \
+  -e GIT_COMMITTER_NAME="$GIT_NAME" \
+  -e GIT_COMMITTER_EMAIL="$GIT_EMAIL" \
+  "$IMAGE_NAME" \
+  sleep infinity >/dev/null
+
+# Detect TTY: attach one only when both stdin and stdout are terminals.
+# Piping or CI contexts get -i only, which keeps stdin available without a PTY.
+TTY_FLAGS=(-i)
+[[ -t 0 && -t 1 ]] && TTY_FLAGS+=(-t)
+
+# Pass OP_SERVICE_ACCOUNT_TOKEN via docker exec -e, not docker run -e, so it
+# does not appear in `docker inspect` container config. The token is in the
+# exec'd process's own environment — the agent uses it directly and already
+# has access to its own /proc/self/environ regardless.
+docker exec "${TTY_FLAGS[@]}" \
+  -e OP_SERVICE_ACCOUNT_TOKEN="$OP_SERVICE_ACCOUNT_TOKEN" \
+  "$CONTAINER_NAME" \
+  bash -c '
+case "$1" in
+  claude)
+    CLAUDE_CODE_OAUTH_TOKEN=$(op item get "Anthropic API Key" --vault Agents --field credential --reveal) || {
+      echo "ERROR: Failed to fetch Anthropic API key from 1Password" >&2
+      exit 1
+    }
+    export CLAUDE_CODE_OAUTH_TOKEN
+    exec claude --dangerously-skip-permissions "${@:2}"
+    ;;
+  codex)
+    OPENAI_API_KEY=$(op item get "OpenAI API Key" --vault Agents --field credential --reveal) || {
+      echo "ERROR: Failed to fetch OpenAI API key from 1Password" >&2
+      exit 1
+    }
+    export OPENAI_API_KEY
+    exec codex "${@:2}"
+    ;;
+esac
+' -- "$AGENT" "$@"
