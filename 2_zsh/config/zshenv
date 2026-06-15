@@ -1,5 +1,7 @@
-# This file is located at modname/config/. - three path segments away is the dotfiles root
-export DOTFILES="${$(readlink ${0:a:h}/.zshenv)%/*/*/*}"
+# This file is located at modname/config/. - three path segments away is the dotfiles root.
+# ${(%):-%N} is the path of this file being sourced; $0 is unreliable here because zsh does
+# not set it to the startup file's path (it stays as the shell's argv[0], e.g. "zsh").
+export DOTFILES="${$(readlink ${(%):-%N})%/*/*/*}"
 
 pushd $DOTFILES > /dev/null
 source $DOTFILES/env.sh
