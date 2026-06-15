@@ -18,3 +18,17 @@
 	name = Martin Andrej Johan Grönlund
 	email = martingronlund@live.se
 	signingKey = ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKNarOAcYXJjxbvVWaEPwe3Sw/toX0HvZwCK+xxowhVA
+
+# Authenticate github.com git operations with the GitHub CLI token over HTTPS so
+# push/fetch work non-interactively, without a 1Password SSH-agent (Touch ID) prompt.
+# The rewrite turns SSH remotes (git@github.com:owner/repo) into
+# https://github.com/owner/repo at connect time; the helper supplies the gh token.
+# Requires `gh` on PATH and a `gh auth login`.
+# Note: the Claude wrapper sets GIT_CONFIG_GLOBAL=~/.config/git/claude, which does not
+# read this file, so its service-account SSH push path is unaffected.
+[url "https://github.com/"]
+	insteadOf = git@github.com:
+	insteadOf = ssh://git@github.com/
+[credential "https://github.com"]
+	helper =
+	helper = !gh auth git-credential
