@@ -32,3 +32,11 @@
 [credential "https://github.com"]
 	helper =
 	helper = !gh auth git-credential
+
+# git.configura.com (GitLab) repos: sign + push with the dedicated passwordless
+# key via ssh-keygen, under the work identity. Applies to any repo with a
+# git@git.configura.com:<namespace>/<project> remote (git >= 2.36). The :*/**
+# glob (not :**) is required because a bare ** after the colon won't cross the
+# path slashes. See ~/.config/git/configura.
+[includeIf "hasconfig:remote.*.url:git@git.configura.com:*/**"]
+	path = ~/.config/git/configura

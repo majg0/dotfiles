@@ -1,0 +1,18 @@
+# Work identity + SSH commit signing for git.configura.com (GitLab) repos.
+# Auto-applied (see the [includeIf] in this directory's `config`) to any repo
+# whose remote is git@git.configura.com:**. Signs with the dedicated passwordless
+# key ~/.ssh/id_ed25519_configura (already registered on git.configura.com as
+# auth_and_signing) via the stock ssh-keygen signer — no 1Password, no prompt.
+[user]
+	name = Martin Grönlund
+	email = martin.gronlund@configura.com
+	signingKey = ~/.ssh/id_ed25519_configura.pub
+[gpg]
+	format = ssh
+[gpg "ssh"]
+	program = ssh-keygen
+	allowedSignersFile = ~/.config/git/configura_allowed_signers
+[commit]
+	gpgSign = true
+[tag]
+	gpgSign = true

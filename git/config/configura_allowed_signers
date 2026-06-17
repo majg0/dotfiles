@@ -1,0 +1,3 @@
+# Public allowed-signers for the git.configura.com identity (PUBLIC key only; safe to commit).
+# Enables local `git log --show-signature` / `git verify-commit` on configura commits.
+martin.gronlund@configura.com namespaces="git" ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINWKM7b5xypZs8GBeyeMSh45IebS8eN7f6jCC8sa0KJF
