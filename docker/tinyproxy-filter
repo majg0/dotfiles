@@ -1,0 +1,20 @@
+# Tinyproxy domain allowlist (POSIX extended regex, matched against hostname)
+# FilterExtended On — these are ERE patterns
+
+# 1Password
+^my\.1password\.com$
+
+# Anthropic
+^api\.anthropic\.com$
+
+# OpenAI
+^api\.openai\.com$
+
+# npm
+^registry\.npmjs\.org$
+
+# GitHub (main site, API, subdomains)
+^(.*\.)?github\.com$
+
+# GitHub content delivery
+^(.*\.)?githubusercontent\.com$
